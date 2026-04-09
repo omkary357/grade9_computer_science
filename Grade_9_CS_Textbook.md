@@ -1,5 +1,3 @@
-# 📘 Grade 9 Computer Science
-
 # 🐍 SECTION 1: PYTHON PROGRAMMING
 
 ---
