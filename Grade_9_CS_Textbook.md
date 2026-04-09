@@ -1,15 +1,10 @@
 # 📘 Grade 9 Computer Science
 
-*Visual Design Note for Publisher: Use a fun, modern layout. Python chapters should use an accent of Navy Blue and Yellow. Java chapters should use an accent of Crimson Red and Teal. Use rounded corners for boxes and playful icon sets.*
-
----
-
 # 🐍 SECTION 1: PYTHON PROGRAMMING
 
 ---
 
 ## 📖 Chapter 1: Revision of Python Basics
-*(Color scheme: Navy Blue headings with Yellow callout boxes)*
 
 ### 🌍 Real-Life Application
 Imagine you are the manager of an amusement park. You need to check if a person is tall enough for a ride (Conditions) and let 50 people in, one by one (Loops). Python helps us give these logical instructions to a computer!
