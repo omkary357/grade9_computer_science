@@ -122,6 +122,31 @@
   border-top: 1px solid rgba(255,255,255,0.06);
 }
 
+.export-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #d0ccc5;
+  border-radius: 6px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.export-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 .progress-label {
   font-size: 0.7rem;
   color: #5a5550;
@@ -965,3 +990,95 @@ blockquote.custom-blockquote p {
   .page-divider { margin-left: 2rem; margin-right: 2rem; }
   .banner-title { font-size: 2rem; }
 }
+
+/* ── Print Media Queries (PDF Export) ─────────────────── */
+@media print {
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+  
+  body, html, #root {
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+  
+  /* Hide UI elements */
+  .sidebar, .export-btn {
+    display: none !important;
+  }
+  
+  /* Reset Content Layout */
+  .layout {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .content {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  
+  /* Reset Page Styling (Remove shadows/borders for clean print) */
+  .book-page, .content-inner {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .book-page::before, .book-page::after {
+    display: none !important;
+  }
+  
+  /* Force Colors to Print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Page Breaks */
+  .chapter-heading {
+    break-before: page;
+    page-break-before: always;
+  }
+  
+  /* Avoid breaking only for items that physically cannot be split cleanly */
+  .book-figure img, tr, .code-lang-badge {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  /* Remove aggressive breaks from huge sections so they flow smoothly across pages */
+  .code-block, .table-wrapper, .reallife-banner, .software-steps, .did-you-know, 
+  .error-box, .recap-card, .lab-card, .exercise-section, .book-figure {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+  
+  /* Print Footer */
+  .print-footer {
+    display: block !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.8rem;
+    font-family: var(--font-ui);
+    color: var(--ink-light);
+    border-top: 1px solid var(--border);
+    padding-top: 0.5rem;
+    background: white;
+  }
+}
+

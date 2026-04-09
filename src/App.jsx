@@ -315,6 +315,9 @@ export default function App() {
         </ul>
 
         <div className="sidebar-footer">
+          <button className="export-btn" onClick={() => window.print()}>
+            🖨️ Export PDF
+          </button>
           <div className="progress-label">Progress</div>
           <div className="progress-bar">
             <div className="progress-fill"
@@ -329,6 +332,9 @@ export default function App() {
           <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
             {textbookContent}
           </ReactMarkdown>
+        </div>
+        <div className="print-footer" style={{ display: 'none' }}>
+          <strong>Grade 9 Computer Science</strong> • Educational Material
         </div>
       </main>
     </div>
