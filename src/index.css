@@ -42,6 +42,7 @@
   --spine-left: inset 20px 0 30px -10px rgba(0,0,0,0.12), inset 3px 0 4px rgba(0,0,0,0.08);
 
   /* Typography */
+  font-size: 13px; /* Scales down ALL REM dimensions efficiently */
   --font-book: 'Playfair Display', Georgia, serif;
   --font-ui: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;

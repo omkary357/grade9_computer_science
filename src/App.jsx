@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { Previewer } from 'pagedjs'
 import textbookContent from '../Grade_9_CS_Textbook.md?raw'
 import './App.css'
 
@@ -110,9 +111,12 @@ function extractText(node) {
 // ─── App ─────────────────────────────────────────────────────────────────────
 export default function App() {
   const [chapters, setChapters]    = useState([])
-  const [activeChapter, setActive] = useState(null)
-  const [currentTheme, setTheme]   = useState('python')
-  const contentRef                 = useRef(null)
+  const [activeChapter, setActiveChapter] = useState(null)
+  const [currentTheme, setCurrentTheme]   = useState('python')
+  
+  const sourceRef = useRef(null)
+  const pagedRef = useRef(null)
+  const [isPagedRendered, setIsPagedRendered] = useState(false)
 
   // Shared mutable context — mutated synchronously during each render pass
   const ctx = useRef({
@@ -133,24 +137,34 @@ export default function App() {
     )
   }, [])
 
-  const scrollToChapter = (chap) => {
-    setActive(chap)
-    const id = 'chapter-' + chap.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  const isPreviewing = useRef(false)
 
+  // Run Paged.js
   useEffect(() => {
-    const el = contentRef.current
-    if (!el) return
-    const onScroll = () => {
-      for (const b of el.querySelectorAll('.section-banner')) {
-        if (b.getBoundingClientRect().top < 200)
-          setTheme(b.classList.contains('banner-java') ? 'java' : 'python')
+    if (sourceRef.current && pagedRef.current && !isPagedRendered && !isPreviewing.current) {
+      isPreviewing.current = true
+      // Clear anything inside just in case
+      pagedRef.current.innerHTML = ''
+      
+      const paged = new Previewer()
+      paged.preview(sourceRef.current.innerHTML, [], pagedRef.current).then(() => {
+        setIsPagedRendered(true)
+      })
+    }
+  }, [isPagedRendered])
+
+  const scrollToChapter = (chapterName) => {
+    setActiveChapter(chapterName)
+    const id = "chapter-" + chapterName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()
+    if (pagedRef.current) {
+      const target = pagedRef.current.querySelector('#' + id)
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
     }
-    el.addEventListener('scroll', onScroll)
-    return () => el.removeEventListener('scroll', onScroll)
-  }, [])
+  }
+
+
 
   // ── Markdown component overrides ────────────────────────────────────────────
   const components = {
@@ -326,16 +340,21 @@ export default function App() {
         </div>
       </nav>
 
-      {/* ── Main scrollable content ── */}
-      <main className="content" ref={contentRef}>
-        <div className="content-inner">
-          <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
-            {textbookContent}
-          </ReactMarkdown>
+      {/* ── Main content wrapper ── */}
+      <main className="content" style={{ overflow: 'auto', background: '#e0e0e0', padding: 0 }}>
+        
+        {/* Hidden Source Content for Paged.js to read from */}
+        <div ref={sourceRef} style={{ display: 'none' }}>
+           <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+             {textbookContent}
+           </ReactMarkdown>
         </div>
-        <div className="print-footer" style={{ display: 'none' }}>
-          <strong>Grade 9 Computer Science</strong> • Educational Material
+
+        {/* Paged.js Render Target */}
+        <div className="paged-viewer-container" ref={pagedRef}>
+           {/* Paged.js injects pages here */}
         </div>
+
       </main>
     </div>
   )

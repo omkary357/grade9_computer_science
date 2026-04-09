@@ -579,9 +579,6 @@ Python is named after a comedy television show called "Monty Python's Flying Cir
 7. Create a program that uses a `for` loop to print all odd numbers from 1 to 20.
 8. Write a program that takes two numbers as input and prints the larger of the two.
 
----
-*(Page Break)*
----
 
 ## 📖 Chapter 2: Functions in Python
 
@@ -865,9 +862,7 @@ The `return` statement immediately stops the function. Any code written inside t
 7. Create a function that takes three numbers and returns the largest of the three.
 8. Write a function `is_prime(n)` that returns True if n is a prime number, otherwise False.
 
----
-*(Page Break)*
----
+
 
 ## 📖 Chapter 3: Introduction to Simple Models
 
@@ -1197,9 +1192,7 @@ Scientists use giant Python models running on supercomputers to predict climate 
 7. Create a simple quiz model with 5 questions and display the percentage score at the end.
 8. Write a Python program that models the growth of a savings account over 5 years using a `for` loop.
 
----
-*(Page Break)*
----
+
 
 # ☕ SECTION 2: JAVA PROGRAMMING
 
@@ -1543,9 +1536,7 @@ Java was originally called "Oak" after an oak tree that stood outside the creato
 7. Write a Java program that calculates and prints the perimeter and area of a circle when the radius is given (use `Math.PI`).
 8. Write a program that takes a temperature in Celsius from the user and prints whether it is "Hot" (>30), "Warm" (20-30), or "Cold" (<20).
 
----
-*(Page Break)*
----
+
 
 ## 📖 Chapter 5: Control Statements in Java
 
@@ -1912,9 +1903,7 @@ The `break` word in a switch statement is super important! If you forget it, the
 7. Write a `do-while` loop program that asks the user to enter a positive number and keeps asking until they do.
 8. Write a Java program that uses a `for` loop to calculate the sum of all even numbers from 1 to 100.
 
----
-*(Page Break)*
----
+
 
 ## 📖 Chapter 6: Basic Java Programming
 
