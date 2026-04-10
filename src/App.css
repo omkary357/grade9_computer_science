@@ -434,6 +434,16 @@ li {
   page-break-inside: avoid;
 }
 
+.setup-box-small {
+  max-width: 70%;
+  margin: 1.5rem auto;
+}
+
+.setup-box-small .book-image {
+  max-width: 85%;
+  margin: 1rem auto;
+}
+
 .software-header {
   display: flex;
   align-items: center;

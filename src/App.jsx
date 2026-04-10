@@ -247,7 +247,7 @@ export default function App() {
       const text  = extractText(children)
       const theme = text.toLowerCase().includes('java') ? 'java' : 'python'
       ctx.theme = theme
-      ctx.nextIsRealLife = ctx.nextIsSoftware = ctx.nextIsDYK =
+      ctx.nextIsRealLife = ctx.nextIsDYK =
         ctx.nextIsError   = ctx.nextIsRecap   = ctx.nextIsLab =
         ctx.nextIsExercise = false
       return <SectionBanner text={text} theme={theme} />
@@ -265,7 +265,6 @@ export default function App() {
     h3({ children }) {
       const text = extractText(children)
       if (text.includes('Real-Life Application') || text.includes('🌍')) { ctx.nextIsRealLife = true; return null }
-      if (text.includes('Software Usage')         || text.includes('🔧')) { ctx.nextIsSoftware  = true; return null }
       if (text.includes('Did You Know')           || text.includes('💡')) { ctx.nextIsDYK        = true; return null }
       if (text.includes('Common Error')           || text.includes('⚠️')) { ctx.nextIsError     = true; return null }
       if (text.includes('Quick Recap')            || text.includes('📝')) { ctx.nextIsRecap     = true; return null }
@@ -281,21 +280,19 @@ export default function App() {
     },
 
     ul({ children }) {
-      if (ctx.nextIsSoftware) { ctx.nextIsSoftware = false; return <SoftwareSteps><ul className="steps-list">{children}</ul></SoftwareSteps> }
       if (ctx.nextIsError)    { ctx.nextIsError    = false; return <ErrorBox><ul className="error-list">{children}</ul></ErrorBox> }
       if (ctx.nextIsRecap)    { ctx.nextIsRecap    = false; return <RecapCard><ul className="recap-list">{children}</ul></RecapCard> }
       return <ul className="book-list">{children}</ul>
     },
 
     ol({ children }) {
-      if (ctx.nextIsSoftware) { ctx.nextIsSoftware = false; return <SoftwareSteps><ol className="steps-list">{children}</ol></SoftwareSteps> }
       if (ctx.nextIsLab)      { ctx.nextIsLab      = false; return <LabCard theme={ctx.theme}><ol className="lab-steps">{children}</ol></LabCard> }
       return <ol className="book-list book-ol">{children}</ol>
     },
 
     blockquote({ children }) {
       return (
-        <div className="software-steps">
+        <div className="software-steps setup-box-small">
           <div className="software-header"><span>🔧</span> Setup Instructions</div>
           <div className="software-body">{children}</div>
         </div>
