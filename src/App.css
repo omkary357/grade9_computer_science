@@ -283,17 +283,7 @@
   margin-bottom: 0;
 }
 
-/* Each chapter starts on a fresh page in Paged.js */
-.chapter-break {
-  break-before: page !important;
-  page-break-before: always !important;
-}
 
-/* Chapter 1 special case — no break before the very first chapter */
-.chapter-break:first-child {
-  break-before: avoid !important;
-  page-break-before: avoid !important;
-}
 
 .chapter-heading.theme-java {
   border-bottom-color: rgba(160,24,43,0.2);

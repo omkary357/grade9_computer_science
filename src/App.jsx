@@ -92,11 +92,16 @@ function SectionBanner({ text, theme }) {
 }
 
 // ─── Chapter Heading ────────────────────────────────────────────────────────────────────
-function ChapterHeading({ text, theme, id, skipBreak }) {
+function ChapterHeading({ text, theme, id }) {
+  // Do not break before the very first chapter 
+  const isFirst = text.includes('Chapter 1:');
+  const breakStyle = isFirst ? {} : { breakBefore: 'page', pageBreakBefore: 'always' };
+
   return (
     <div
       id={id}
-      className={`chapter-heading theme-${theme}${skipBreak ? '' : ' chapter-break'}`}
+      className={`chapter-heading theme-${theme}`}
+      style={breakStyle}
     >
       <div className="chapter-badge">Chapter</div>
       <h2 className="chapter-title">{text.replace(/^📖\s*/, '')}</h2>
@@ -134,7 +139,6 @@ export default function App() {
   // Shared mutable context — mutated synchronously during each render pass
   const ctx = useRef({
     theme: 'python',
-    isFirstChapter: true,
     nextIsRealLife: false,
     nextIsSoftware: false,
     nextIsDYK:      false,
@@ -159,17 +163,11 @@ export default function App() {
       isPreviewing.current = true
       pagedRef.current.innerHTML = ''
 
-      // ── Inject style tag BEFORE Paged.js runs so it reads break rules during layout
+      // ── Ensure style block for other Paged.js elements isn't interfering with chapters
       let pagedStyle = document.getElementById('paged-break-style')
       if (!pagedStyle) {
         pagedStyle = document.createElement('style')
         pagedStyle.id = 'paged-break-style'
-        pagedStyle.textContent = `
-          .chapter-break {
-            break-before: page !important;
-            page-break-before: always !important;
-          }
-        `
         document.head.appendChild(pagedStyle)
       }
 
@@ -261,9 +259,7 @@ export default function App() {
       const text = extractText(children)
       const id   = 'chapter-' + text.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()
       if (text.includes('Chapter')) {
-        const isFirst = ctx.isFirstChapter
-        ctx.isFirstChapter = false
-        return <ChapterHeading id={id} text={text} theme={ctx.theme} skipBreak={isFirst} />
+        return <ChapterHeading id={id} text={text} theme={ctx.theme} />
       }
       return <h2 id={id} className={`section-h2 theme-${ctx.theme}`}>{children}</h2>
     },
