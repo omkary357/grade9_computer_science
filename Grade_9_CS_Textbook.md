@@ -10,8 +10,8 @@ We will use **IDLE** to run our Python programs.
 > 2. The **Interactive Shell** (`>>>`) opens first. It's a great place to test 1-line codes!
 > 3. To write a proper program, click `File > New File`.
 > 4. Type your program, click `Run > Run Module` (or press F5), and see the magic!
-
-![Python IDLE Interface](/images/python_idle.png)
+> 
+> ![Python IDLE Interface](/images/python_idle.png)
 
 ### 📚 1.1 Data Types and Variables
 
