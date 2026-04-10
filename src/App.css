@@ -289,6 +289,12 @@
   page-break-before: always !important;
 }
 
+/* Chapter 1 special case — no break before the very first chapter */
+.chapter-break:first-child {
+  break-before: avoid !important;
+  page-break-before: avoid !important;
+}
+
 .chapter-heading.theme-java {
   border-bottom-color: rgba(160,24,43,0.2);
 }
@@ -429,6 +435,8 @@ li {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .software-header {
@@ -845,6 +853,8 @@ li {
 .book-figure {
   margin: 1.5rem 3rem;
   text-align: center;
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .book-image {

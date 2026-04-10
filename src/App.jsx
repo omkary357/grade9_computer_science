@@ -91,12 +91,12 @@ function SectionBanner({ text, theme }) {
   )
 }
 
-// ─── Chapter Heading ──────────────────────────────────────────────────────────
-function ChapterHeading({ text, theme, id }) {
+// ─── Chapter Heading ────────────────────────────────────────────────────────────────────
+function ChapterHeading({ text, theme, id, skipBreak }) {
   return (
     <div
       id={id}
-      className={`chapter-heading theme-${theme} chapter-break`}
+      className={`chapter-heading theme-${theme}${skipBreak ? '' : ' chapter-break'}`}
     >
       <div className="chapter-badge">Chapter</div>
       <h2 className="chapter-title">{text.replace(/^📖\s*/, '')}</h2>
@@ -134,6 +134,7 @@ export default function App() {
   // Shared mutable context — mutated synchronously during each render pass
   const ctx = useRef({
     theme: 'python',
+    isFirstChapter: true,
     nextIsRealLife: false,
     nextIsSoftware: false,
     nextIsDYK:      false,
@@ -259,8 +260,11 @@ export default function App() {
     h2({ children }) {
       const text = extractText(children)
       const id   = 'chapter-' + text.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()
-      if (text.includes('Chapter'))
-        return <ChapterHeading id={id} text={text} theme={ctx.theme} />
+      if (text.includes('Chapter')) {
+        const isFirst = ctx.isFirstChapter
+        ctx.isFirstChapter = false
+        return <ChapterHeading id={id} text={text} theme={ctx.theme} skipBreak={isFirst} />
+      }
       return <h2 id={id} className={`section-h2 theme-${ctx.theme}`}>{children}</h2>
     },
 

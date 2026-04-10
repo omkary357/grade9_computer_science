@@ -1189,11 +1189,6 @@ Scientists use giant Python models running on supercomputers to predict climate 
 8. Write a Python program that models the growth of a savings account over 5 years using a `for` loop.
 
 
-
-# ☕ SECTION 2: JAVA PROGRAMMING
-
----
-
 ## 📖 Chapter 4: Introduction to Java & Basic Syntax
 *(Color scheme: Crimson Red headings with Teal callout boxes)*
 
