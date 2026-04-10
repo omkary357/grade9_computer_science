@@ -1,7 +1,3 @@
-# 🐍 SECTION 1: PYTHON PROGRAMMING
-
----
-
 ## 📖 Chapter 1: Revision of Python Basics
 
 ### 🌍 Real-Life Application

@@ -276,11 +276,17 @@
   z-index: 1;
 }
 
-/* ── Chapter Headings ─────────────────────────────────── */
+/* ── Chapter Headings ───────────────────────────────────── */
 .chapter-heading {
   padding: 2rem 3rem 1rem;
   border-bottom: 2px solid var(--border);
   margin-bottom: 0;
+}
+
+/* Each chapter starts on a fresh page in Paged.js */
+.chapter-break {
+  break-before: page !important;
+  page-break-before: always !important;
 }
 
 .chapter-heading.theme-java {
@@ -670,6 +676,34 @@ li {
 
 .exercise-body { padding: 1rem 1.5rem; background: #fdfcfa; }
 
+/* ── Exercise Heading ───────────────────────────────────── */
+.exercise-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2rem 3rem 0.5rem;
+  padding: 0.9rem 1.5rem;
+  border-radius: 10px;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: white;
+  background: linear-gradient(135deg, #1e1b17, #35302a);
+  border-left: 4px solid var(--py-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.exercise-heading.theme-java {
+  background: linear-gradient(135deg, #1e1b17, #35302a);
+  border-left-color: var(--java-accent);
+}
+
+.exercise-heading-icon {
+  font-size: 1.3rem;
+  filter: drop-shadow(0 0 6px rgba(245,183,0,0.4));
+}
+
 /* ── Code Blocks ──────────────────────────────────────── */
 .code-block {
   margin: 1rem 3rem;
@@ -993,11 +1027,6 @@ blockquote.custom-blockquote p {
 
 /* ── Print Media Queries (PDF Export) ─────────────────── */
 @media print {
-  @page {
-    margin: 1.5cm;
-    size: A4;
-  }
-  
   body, html, #root {
     height: auto !important;
     overflow: visible !important;
@@ -1084,27 +1113,107 @@ blockquote.custom-blockquote p {
 
 /* ── Paged.js Web UI ──────────────────────────────────── */
 /* This makes the browser view look like physical A4 pages! */
+
+/* @page controls the margin boxes Paged.js creates */
+@page {
+  size: A4;
+  margin-top: 0.4cm;
+  margin-right: 1cm;
+  margin-bottom: 0.7cm;
+  margin-left: 0.5cm;
+
+  @bottom-center {
+    content: counter(page);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 9pt;
+    color: #7a7570;
+    letter-spacing: 0.06em;
+  }
+}
+
+/* Page viewer background */
 .pagedjs_pages {
   display: flex;
   flex-direction: column;
   align-items: center;
   background: #e0e0e0;
-  padding: 3rem 0;
-  gap: 3rem;
+  padding: 2rem 0;
+  gap: 2rem;
   width: 100%;
 }
 
+/* Individual page sheet */
 .pagedjs_page {
   background: white;
   width: 210mm !important;
   height: 297mm !important;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
   margin: 0 !important;
   position: relative;
   overflow: hidden;
 }
 
+/* ── Force Paged.js internal margin boxes to be small ── */
+/* Top margin box row */
+.pagedjs_margin-top,
+.pagedjs_margin-top-left-corner-holder,
+.pagedjs_margin-top-right-corner-holder {
+  height: 0.4cm !important;
+  min-height: 0 !important;
+}
+
+/* Bottom margin box row — keep enough for page number */
+.pagedjs_margin-bottom,
+.pagedjs_margin-bottom-left-corner-holder,
+.pagedjs_margin-bottom-right-corner-holder {
+  height: 0.7cm !important;
+  min-height: 0 !important;
+}
+
+/* Left margin column */
+.pagedjs_margin-left,
+.pagedjs_margin-left-top,
+.pagedjs_margin-left-middle,
+.pagedjs_margin-left-bottom {
+  width: 0.5cm !important;
+  min-width: 0 !important;
+}
+
+/* Right margin column */
+.pagedjs_margin-right,
+.pagedjs_margin-right-top,
+.pagedjs_margin-right-middle,
+.pagedjs_margin-right-bottom {
+  width: 1cm !important;
+}
+
+/* Internal content padding within page area */
+.pagedjs_page_content {
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Page number alignment */
+.pagedjs_margin-bottom-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media print {
+  @page {
+    margin-top: 0.4cm;
+    margin-right: 1cm;
+    margin-bottom: 0.7cm;
+    margin-left: 0.5cm;
+    @bottom-center {
+      content: counter(page);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 9pt;
+      color: #7a7570;
+    }
+  }
   .pagedjs_pages {
     background: transparent;
     padding: 0;
@@ -1115,4 +1224,3 @@ blockquote.custom-blockquote p {
     margin: 0 !important;
   }
 }
-

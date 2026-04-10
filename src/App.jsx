@@ -94,9 +94,22 @@ function SectionBanner({ text, theme }) {
 // ─── Chapter Heading ──────────────────────────────────────────────────────────
 function ChapterHeading({ text, theme, id }) {
   return (
-    <div id={id} className={`chapter-heading theme-${theme}`}>
+    <div
+      id={id}
+      className={`chapter-heading theme-${theme} chapter-break`}
+    >
       <div className="chapter-badge">Chapter</div>
       <h2 className="chapter-title">{text.replace(/^📖\s*/, '')}</h2>
+    </div>
+  )
+}
+
+// ─── Exercise Heading ─────────────────────────────────────────────────────────
+function ExerciseHeading({ theme }) {
+  return (
+    <div className={`exercise-heading theme-${theme}`}>
+      <span className="exercise-heading-icon">🧠</span>
+      <span>Exercises</span>
     </div>
   )
 }
@@ -143,15 +156,80 @@ export default function App() {
   useEffect(() => {
     if (sourceRef.current && pagedRef.current && !isPagedRendered && !isPreviewing.current) {
       isPreviewing.current = true
-      // Clear anything inside just in case
       pagedRef.current.innerHTML = ''
-      
+
+      // ── Inject style tag BEFORE Paged.js runs so it reads break rules during layout
+      let pagedStyle = document.getElementById('paged-break-style')
+      if (!pagedStyle) {
+        pagedStyle = document.createElement('style')
+        pagedStyle.id = 'paged-break-style'
+        pagedStyle.textContent = `
+          .chapter-break {
+            break-before: page !important;
+            page-break-before: always !important;
+          }
+        `
+        document.head.appendChild(pagedStyle)
+      }
+
       const paged = new Previewer()
       paged.preview(sourceRef.current.innerHTML, [], pagedRef.current).then(() => {
+        const container = pagedRef.current
+        if (!container) return
+
+        // ── 1. Shrink margin boxes ─────────────────────────────────────────────
+        container.querySelectorAll(
+          '.pagedjs_margin-top, .pagedjs_margin-top-left-corner-holder, .pagedjs_margin-top-right-corner-holder'
+        ).forEach(el => el.style.setProperty('height', '6px', 'important'))
+
+        container.querySelectorAll(
+          '.pagedjs_margin-bottom, .pagedjs_margin-bottom-left-corner-holder, .pagedjs_margin-bottom-right-corner-holder'
+        ).forEach(el => el.style.setProperty('height', '28px', 'important'))
+
+        container.querySelectorAll(
+          '.pagedjs_margin-left, .pagedjs_margin-left-top, .pagedjs_margin-left-middle, .pagedjs_margin-left-bottom'
+        ).forEach(el => el.style.setProperty('width', '8px', 'important'))
+
+        container.querySelectorAll('.pagedjs_page_content').forEach(el => {
+          el.style.setProperty('padding-top', '0', 'important')
+          el.style.setProperty('padding-left', '0', 'important')
+          el.style.setProperty('padding-bottom', '0', 'important')
+        })
+
+        container.querySelectorAll('.pagedjs_area').forEach(el => {
+          el.style.setProperty('top', '6px', 'important')
+          el.style.setProperty('left', '8px', 'important')
+          el.style.setProperty('bottom', '28px', 'important')
+        })
+
+        // ── 2. Inject page numbers at bottom of every page ─────────────────────
+        container.querySelectorAll('.pagedjs_page').forEach((page, index) => {
+          page.querySelectorAll('.manual-page-num').forEach(n => n.remove())
+          const num = document.createElement('div')
+          num.className = 'manual-page-num'
+          num.textContent = index + 1
+          num.style.cssText = [
+            'position:absolute',
+            'bottom:6px',
+            'left:0',
+            'right:0',
+            'text-align:center',
+            'font-family:Inter,system-ui,sans-serif',
+            'font-size:11px',
+            'font-weight:500',
+            'color:#7a7570',
+            'letter-spacing:0.06em',
+            'pointer-events:none',
+            'z-index:100',
+          ].join(';')
+          page.appendChild(num)
+        })
+
         setIsPagedRendered(true)
       })
     }
   }, [isPagedRendered])
+
 
   const scrollToChapter = (chapterName) => {
     setActiveChapter(chapterName)
@@ -194,7 +272,7 @@ export default function App() {
       if (text.includes('Common Error')           || text.includes('⚠️')) { ctx.nextIsError     = true; return null }
       if (text.includes('Quick Recap')            || text.includes('📝')) { ctx.nextIsRecap     = true; return null }
       if (text.includes('Lab Activity')           || text.includes('🧪') || text.includes('✏️')) { ctx.nextIsLab = true; return null }
-      if (text.includes('Exercises')              || text.includes('🧠')) { ctx.nextIsExercise  = true; return null }
+      if (text.includes('Exercises')              || text.includes('🧠')) { ctx.nextIsExercise  = true; return <ExerciseHeading theme={ctx.theme} /> }
       return <h3 className={`content-h3 theme-${ctx.theme}`}>{children}</h3>
     },
 
