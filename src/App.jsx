@@ -95,13 +95,11 @@ function SectionBanner({ text, theme }) {
 function ChapterHeading({ text, theme, id }) {
   // Do not break before the very first chapter 
   const isFirst = text.includes('Chapter 1:');
-  const breakStyle = isFirst ? {} : { breakBefore: 'page', pageBreakBefore: 'always' };
 
   return (
     <div
       id={id}
-      className={`chapter-heading theme-${theme}`}
-      style={breakStyle}
+      className={`chapter-heading theme-${theme} ${isFirst ? '' : 'pagedjs-page-break'}`}
     >
       <div className="chapter-badge">Chapter</div>
       <h2 className="chapter-title">{text.replace(/^📖\s*/, '')}</h2>

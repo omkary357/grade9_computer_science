@@ -1067,13 +1067,17 @@ d = float(input("Enter distance (km): "))
 t = float(input("Enter time (hours): "))
 
 speed = calculate_speed(d, t)
-print(f"Speed: {speed:.2f} km/h")
 
-# Predict time for different distances
-print("\nTravel predictions at this speed:")
-for dist in [100, 250, 500]:
-    t_pred = calculate_time(dist, speed)
-    print(f"  {dist} km → {t_pred:.2f} hours")
+if type(speed) == str:
+    print(speed)
+else:
+    print(f"Speed: {speed:.2f} km/h")
+    
+    # Predict time for different distances
+    print("\nTravel predictions at this speed:")
+    for dist in [100, 250, 500]:
+        t_pred = calculate_time(dist, speed)
+        print(f"  {dist} km → {t_pred:.2f} hours")
 ```
 **Output (when 120, 2):**
 ```
@@ -1190,7 +1194,6 @@ Scientists use giant Python models running on supercomputers to predict climate 
 
 
 ## 📖 Chapter 4: Introduction to Java & Basic Syntax
-*(Color scheme: Crimson Red headings with Teal callout boxes)*
 
 ### 🌍 Real-Life Application
 When you play a video game on your mobile phone or use a banking app, there is a very high chance it was built using Java! Java's motto is "Write Once, Run Anywhere," meaning the Java code you write on your Windows laptop can easily run on a Mac or Android phone.
@@ -1202,7 +1205,7 @@ To avoid complex installations, we will use an online tool called Programiz to r
 > 2. You will see an online text editor on the left with some default `class Main` code.
 > 3. The black box on the right is the **Console** where the output will appear.
 > 4. Type your Java code inside the editor, and hit the blue **Run** button!
-> ![Programiz Javascript Compiler Mockup](/images/java_compiler.png)
+> ![Programiz Java Compiler Mockup](/images/java_compiler.png)
 
 ### 📚 4.1 Features of Java
 
@@ -2204,7 +2207,7 @@ Arrays in Java are fixed in size. Once you declare an array to hold 5 items, you
 5. In Java, a method must specify its return data type in its header.
 6. A `void` method can use the `return` keyword to exit early.
 7. `array.length` is a method call (uses parentheses).
-8. The enhanced for-each loop can be used with Java arrays.
+8. A while loop can also be used to iterate through an array.
 9. Two different Java methods can have the same name if parameters differ (overloading).
 10. `static` methods can only be called from within the same class.
 

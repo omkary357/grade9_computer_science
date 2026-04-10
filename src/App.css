@@ -283,6 +283,11 @@
   margin-bottom: 0;
 }
 
+.pagedjs-page-break {
+  break-before: page !important;
+  page-break-before: always !important;
+}
+
 
 
 .chapter-heading.theme-java {
@@ -1076,9 +1081,9 @@ blockquote.custom-blockquote p {
   }
   
   /* Page Breaks */
-  .chapter-heading {
-    break-before: page;
-    page-break-before: always;
+  .chapter-heading, .pagedjs-page-break {
+    break-before: page !important;
+    page-break-before: always !important;
   }
   
   /* Avoid breaking only for items that physically cannot be split cleanly */
