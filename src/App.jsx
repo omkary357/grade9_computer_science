@@ -126,10 +126,10 @@ function extractText(node) {
 
 // ─── App ─────────────────────────────────────────────────────────────────────
 export default function App() {
-  const [chapters, setChapters]    = useState([])
+  const [chapters, setChapters] = useState([])
   const [activeChapter, setActiveChapter] = useState(null)
-  const [currentTheme, setCurrentTheme]   = useState('python')
-  
+  const [currentTheme, setCurrentTheme] = useState('python')
+
   const sourceRef = useRef(null)
   const pagedRef = useRef(null)
   const [isPagedRendered, setIsPagedRendered] = useState(false)
@@ -139,10 +139,10 @@ export default function App() {
     theme: 'python',
     nextIsRealLife: false,
     nextIsSoftware: false,
-    nextIsDYK:      false,
-    nextIsError:    false,
-    nextIsRecap:    false,
-    nextIsLab:      false,
+    nextIsDYK: false,
+    nextIsError: false,
+    nextIsRecap: false,
+    nextIsLab: false,
     nextIsExercise: false,
   }).current
 
@@ -244,18 +244,18 @@ export default function App() {
   // ── Markdown component overrides ────────────────────────────────────────────
   const components = {
     h1({ children }) {
-      const text  = extractText(children)
+      const text = extractText(children)
       const theme = text.toLowerCase().includes('java') ? 'java' : 'python'
       ctx.theme = theme
       ctx.nextIsRealLife = ctx.nextIsDYK =
-        ctx.nextIsError   = ctx.nextIsRecap   = ctx.nextIsLab =
+        ctx.nextIsError = ctx.nextIsRecap = ctx.nextIsLab =
         ctx.nextIsExercise = false
       return <SectionBanner text={text} theme={theme} />
     },
 
     h2({ children }) {
       const text = extractText(children)
-      const id   = 'chapter-' + text.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()
+      const id = 'chapter-' + text.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()
       if (text.includes('Chapter')) {
         return <ChapterHeading id={id} text={text} theme={ctx.theme} />
       }
@@ -265,28 +265,28 @@ export default function App() {
     h3({ children }) {
       const text = extractText(children)
       if (text.includes('Real-Life Application') || text.includes('🌍')) { ctx.nextIsRealLife = true; return null }
-      if (text.includes('Did You Know')           || text.includes('💡')) { ctx.nextIsDYK        = true; return null }
-      if (text.includes('Common Error')           || text.includes('⚠️')) { ctx.nextIsError     = true; return null }
-      if (text.includes('Quick Recap')            || text.includes('📝')) { ctx.nextIsRecap     = true; return null }
-      if (text.includes('Lab Activity')           || text.includes('🧪') || text.includes('✏️')) { ctx.nextIsLab = true; return null }
-      if (text.includes('Exercises')              || text.includes('🧠')) { ctx.nextIsExercise  = true; return <ExerciseHeading theme={ctx.theme} /> }
+      if (text.includes('Did You Know') || text.includes('💡')) { ctx.nextIsDYK = true; return null }
+      if (text.includes('Common Error') || text.includes('⚠️')) { ctx.nextIsError = true; return null }
+      if (text.includes('Quick Recap') || text.includes('📝')) { ctx.nextIsRecap = true; return null }
+      if (text.includes('Lab Activity') || text.includes('🧪') || text.includes('✏️')) { ctx.nextIsLab = true; return null }
+      if (text.includes('Exercises') || text.includes('🧠')) { ctx.nextIsExercise = true; return <ExerciseHeading theme={ctx.theme} /> }
       return <h3 className={`content-h3 theme-${ctx.theme}`}>{children}</h3>
     },
 
     p({ children }) {
       if (ctx.nextIsRealLife) { ctx.nextIsRealLife = false; return <RealLifeBanner><p>{children}</p></RealLifeBanner> }
-      if (ctx.nextIsDYK)      { ctx.nextIsDYK      = false; return <DidYouKnow><p>{children}</p></DidYouKnow> }
+      if (ctx.nextIsDYK) { ctx.nextIsDYK = false; return <DidYouKnow><p>{children}</p></DidYouKnow> }
       return <p className="book-para">{children}</p>
     },
 
     ul({ children }) {
-      if (ctx.nextIsError)    { ctx.nextIsError    = false; return <ErrorBox><ul className="error-list">{children}</ul></ErrorBox> }
-      if (ctx.nextIsRecap)    { ctx.nextIsRecap    = false; return <RecapCard><ul className="recap-list">{children}</ul></RecapCard> }
+      if (ctx.nextIsError) { ctx.nextIsError = false; return <ErrorBox><ul className="error-list">{children}</ul></ErrorBox> }
+      if (ctx.nextIsRecap) { ctx.nextIsRecap = false; return <RecapCard><ul className="recap-list">{children}</ul></RecapCard> }
       return <ul className="book-list">{children}</ul>
     },
 
     ol({ children }) {
-      if (ctx.nextIsLab)      { ctx.nextIsLab      = false; return <LabCard theme={ctx.theme}><ol className="lab-steps">{children}</ol></LabCard> }
+      if (ctx.nextIsLab) { ctx.nextIsLab = false; return <LabCard theme={ctx.theme}><ol className="lab-steps">{children}</ol></LabCard> }
       return <ol className="book-list book-ol">{children}</ol>
     },
 
@@ -319,9 +319,9 @@ export default function App() {
     },
     thead({ children }) { return <thead>{children}</thead> },
     tbody({ children }) { return <tbody>{children}</tbody> },
-    tr({ children })    { return <tr>{children}</tr> },
-    th({ children })    { return <th>{children}</th> },
-    td({ children })    { return <td>{children}</td> },
+    tr({ children }) { return <tr>{children}</tr> },
+    th({ children }) { return <th>{children}</th> },
+    td({ children }) { return <td>{children}</td> },
 
     // ── code: pass language blocks through; style inline code ──────────────────
     code({ className, children, ...props }) {
@@ -332,11 +332,11 @@ export default function App() {
 
     // ── pre: wraps ALL fenced code blocks ──────────────────────────────────────
     pre({ children }) {
-      const codeEl  = Array.isArray(children) ? children[0] : children
-      const cls     = codeEl?.props?.className || ''
+      const codeEl = Array.isArray(children) ? children[0] : children
+      const cls = codeEl?.props?.className || ''
 
       if (cls.startsWith('language-')) {
-        const lang       = cls.replace('language-', '')
+        const lang = cls.replace('language-', '')
         const themeClass = lang === 'java' ? 'code-java' : lang === 'python' ? 'code-python' : ''
         return (
           <div className={`code-block ${themeClass}`}>
@@ -389,8 +389,8 @@ export default function App() {
         <ul className="nav-list">
           {chapters
             .filter(c => c.toLowerCase().includes('java') ||
-                         c.toLowerCase().includes('control') ||
-                         c.toLowerCase().includes('basic java'))
+              c.toLowerCase().includes('control') ||
+              c.toLowerCase().includes('basic java'))
             .map((chap, i) => (
               <li key={i}
                 className={`nav-item java-item ${activeChapter === chap ? 'active' : ''}`}
@@ -415,17 +415,17 @@ export default function App() {
 
       {/* ── Main content wrapper ── */}
       <main className="content" style={{ overflow: 'auto', background: '#e0e0e0', padding: 0 }}>
-        
+
         {/* Hidden Source Content for Paged.js to read from */}
         <div ref={sourceRef} style={{ display: 'none' }}>
-           <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
-             {textbookContent}
-           </ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+            {textbookContent}
+          </ReactMarkdown>
         </div>
 
         {/* Paged.js Render Target */}
         <div className="paged-viewer-container" ref={pagedRef}>
-           {/* Paged.js injects pages here */}
+          {/* Paged.js injects pages here */}
         </div>
 
       </main>
