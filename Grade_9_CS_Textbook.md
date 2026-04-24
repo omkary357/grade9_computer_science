@@ -1,4 +1,4 @@
-## 📖 Chapter 1: Revision of Python Basics
+<!-- ## 📖 Chapter 1: Revision of Python Basics
 
 ### 🌍 Real-Life Application
 Imagine you are the manager of an amusement park. You need to check if a person is tall enough for a ride (Conditions) and let 50 people in, one by one (Loops). Python helps us give these logical instructions to a computer!
@@ -1122,8 +1122,8 @@ Scientists use giant Python models running on supercomputers to predict climate 
 
 ---
 
-### 🧠 Exercises
-
+### 🧠 Exercises -->
+<!-- 
 **A. Fill in the Blanks**
 1. A ________ is a program that simulates real-world systems.
 2. To calculate simple interest, we need Principal, ________, and Time.
@@ -1191,7 +1191,7 @@ Scientists use giant Python models running on supercomputers to predict climate 
 6. Build a distance converter model that converts kilometers to miles, feet, and centimeters.
 7. Create a simple quiz model with 5 questions and display the percentage score at the end.
 8. Write a Python program that models the growth of a savings account over 5 years using a `for` loop.
-
+ -->
 
 ## 📖 Chapter 4: Introduction to Java & Basic Syntax
 
