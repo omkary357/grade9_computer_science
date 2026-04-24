@@ -1,58 +1,65 @@
 /* ═══════════════════════════════════════════════════════
    index.css — Global Tokens & Foundations
 ════════════════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Nunito:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
   /* Layout */
-  --nav-width: 280px;
+  --nav-width: 300px;
 
-  /* Python theme — Navy Blue + Golden Yellow */
-  --py-primary: #0f4c81;
-  --py-secondary: #1a68a8;
-  --py-accent: #f5b700;
-  --py-light: #e8f3fc;
-  --py-muted: #ddeaf7;
-  --py-gradient: linear-gradient(135deg, #0d3d6e 0%, #1a68a8 60%, #0f4c81 100%);
+  /* Java Brand Colors — Deep Teal + Amber */
+  --java-900: #0d1f2d;
+  --java-800: #122839;
+  --java-700: #1a3a50;
+  --java-600: #254d6a;
+  --java-500: #2e6285;
+  --java-400: #4a85a8;
+  --java-300: #6fa8c8;
+  --java-200: #a8cfe0;
+  --java-100: #d4eaf5;
 
-  /* Java theme — Crimson + Teal */
-  --java-primary: #a0182b;
-  --java-secondary: #c0202f;
-  --java-accent: #00897b;
-  --java-light: #fde8ea;
-  --java-muted: #fdf0f1;
-  --java-gradient: linear-gradient(135deg, #7b0d1e 0%, #a0182b 60%, #c0202f 100%);
+  --amber-600: #d97706;
+  --amber-500: #f59e0b;
+  --amber-400: #fbbf24;
+  --amber-300: #fcd34d;
+  --amber-100: #fef3c7;
 
-  /* Neutral palette */
-  --white: #ffffff;
-  --paper: #fdfcfa;
-  --paper-warm: #faf7f2;
-  --ink: #1e1b17;
-  --ink-mid: #4a4540;
-  --ink-light: #7a7570;
-  --border: #e8e2d9;
-  --border-strong: #ccc6bc;
-  --bg-desk: #2c2825;
+  --coral-600: #dc4f38;
+  --coral-500: #ef6347;
+  --coral-400: #f87b61;
+
+  --mint-600: #059669;
+  --mint-500: #10b981;
+  --mint-400: #34d399;
+  --mint-100: #d1fae5;
+
+  /* Paper / Page */
+  --paper: #ffffff;
+  --paper-warm: #fefcf9;
+  --paper-tinted: #f8f6f2;
+  --ink: #0f1923;
+  --ink-mid: #374151;
+  --ink-soft: #6b7280;
+  --ink-light: #9ca3af;
+  --border: #e5e7eb;
+  --border-soft: #f0f0f0;
+  --border-strong: #d1d5db;
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.2);
-  --shadow-paper: 0 0 0 1px rgba(0, 0, 0, 0.04), 0 30px 60px -15px rgba(0, 0, 0, 0.2);
-  --spine-left: inset 20px 0 30px -10px rgba(0, 0, 0, 0.12), inset 3px 0 4px rgba(0, 0, 0, 0.08);
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-page: 0 2px 8px rgba(0,0,0,0.06), 0 20px 60px rgba(0,0,0,0.14);
 
   /* Typography */
   font-size: 13px;
-  /* Scales down ALL REM dimensions efficiently */
-  --font-book: 'Playfair Display', Georgia, serif;
   --font-ui: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Space Grotesk', 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
-  --font-heading: 'Nunito', 'Inter', sans-serif;
 }
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -60,14 +67,7 @@
 
 body {
   font-family: var(--font-ui);
-  background-color: var(--bg-desk);
-  background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(30, 25, 20, 0.8) 0%, transparent 70%),
-    repeating-linear-gradient(-45deg,
-      rgba(255, 255, 255, 0.015) 0px,
-      rgba(255, 255, 255, 0.015) 1px,
-      transparent 1px,
-      transparent 10px);
+  background: #0d1f2d;
   color: var(--ink);
   overflow: hidden;
   height: 100vh;
@@ -78,20 +78,7 @@ body {
   width: 100vw;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }

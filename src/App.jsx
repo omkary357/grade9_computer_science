@@ -5,45 +5,15 @@ import { Previewer } from 'pagedjs'
 import textbookContent from '../Grade_9_CS_Textbook.md?raw'
 import './App.css'
 
-// ─── Did You Know ─────────────────────────────────────────────────────────────
-function DidYouKnow({ children }) {
-  return (
-    <div className="did-you-know">
-      <div className="dyk-icon">💡</div>
-      <div className="dyk-content">
-        <strong>Did You Know?</strong>
-        {children}
-      </div>
-    </div>
-  )
+// ─── Helper: Extract plain text from React children ────────────────────────
+function extractText(node) {
+  if (typeof node === 'string') return node
+  if (Array.isArray(node)) return node.map(extractText).join('')
+  if (node?.props?.children) return extractText(node.props.children)
+  return String(node || '')
 }
 
-// ─── Common Errors ────────────────────────────────────────────────────────────
-function ErrorBox({ children }) {
-  return (
-    <div className="error-box">
-      <div className="error-icon">⚠️</div>
-      <div className="error-content">
-        <strong>Common Errors to Avoid</strong>
-        {children}
-      </div>
-    </div>
-  )
-}
-
-// ─── Quick Recap ──────────────────────────────────────────────────────────────
-function RecapCard({ children }) {
-  return (
-    <div className="recap-card">
-      <div className="recap-header">
-        <span>📓</span> Quick Recap
-      </div>
-      <div className="recap-body">{children}</div>
-    </div>
-  )
-}
-
-// ─── Real-Life Application ────────────────────────────────────────────────────
+// ─── Real-Life Application Banner ──────────────────────────────────────────
 function RealLifeBanner({ children }) {
   return (
     <div className="reallife-banner">
@@ -56,89 +26,121 @@ function RealLifeBanner({ children }) {
   )
 }
 
-// ─── Software Setup ───────────────────────────────────────────────────────────
-function SoftwareSteps({ children }) {
+// ─── Did You Know Callout ───────────────────────────────────────────────────
+function DidYouKnow({ children }) {
   return (
-    <div className="software-steps">
-      <div className="software-header"><span>🔧</span> Software Setup</div>
-      <div className="software-body">{children}</div>
+    <div className="did-you-know">
+      <div className="dyk-icon">💡</div>
+      <div className="dyk-content">
+        <strong>Did You Know?</strong>
+        {children}
+      </div>
     </div>
   )
 }
 
-// ─── Lab Activity ─────────────────────────────────────────────────────────────
-function LabCard({ children, theme }) {
+// ─── Common Errors Box ──────────────────────────────────────────────────────
+function ErrorBox({ children }) {
+  return (
+    <div className="error-box">
+      <div className="error-icon">⚠️</div>
+      <div className="error-content">
+        <strong>Common Errors to Avoid</strong>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+// ─── Quick Recap Card ───────────────────────────────────────────────────────
+function RecapCard({ children }) {
+  return (
+    <div className="recap-card">
+      <div className="recap-header">
+        <span>📓</span> Quick Recap
+      </div>
+      <div className="recap-body">{children}</div>
+    </div>
+  )
+}
+
+// ─── Lab Activity Card (collapsible) ────────────────────────────────────────
+function LabCard({ children }) {
   const [expanded, setExpanded] = useState(true)
   return (
-    <div className={`lab-card theme-${theme}`}>
+    <div className="lab-card">
       <div className="lab-header" onClick={() => setExpanded(e => !e)}>
-        <span>✏️</span>
-        <span>Lab Activity</span>
-        <span className="lab-toggle">{expanded ? '▲' : '▼'}</span>
+        <span className="lab-emoji">🧪</span>
+        <div className="lab-title-text">
+          <span>Lab Activity</span>
+          Step-by-step hands-on exercise
+        </div>
+        <span className="lab-toggle" style={{ transform: expanded ? 'rotate(0deg)' : 'rotate(-90deg)' }}>▼</span>
       </div>
       {expanded && <div className="lab-body">{children}</div>}
     </div>
   )
 }
 
-// ─── Section Banner ───────────────────────────────────────────────────────────
-function SectionBanner({ text, theme }) {
+// ─── Chapter Heading ────────────────────────────────────────────────────────
+function ChapterHeading({ text, id }) {
+  // Extract chapter number
+  const match = text.match(/Chapter\s+(\d+)/i)
+  const num = match ? match[1] : ''
+  const title = text.replace(/^📖\s*/, '').replace(/^Chapter\s+\d+:\s*/i, '').trim()
+  const isFirst = num === '7'
+
   return (
-    <div className={`section-banner banner-${theme}`}>
-      <div className="banner-pill">{theme === 'python' ? '🐍 Python' : '☕ Java'}</div>
+    <div
+      id={id}
+      className={`chapter-heading ${isFirst ? '' : 'pagedjs-page-break'}`}
+    >
+      <div className="chapter-eyebrow">
+        <div className="chapter-badge">
+          <div className="chapter-number-dot" />
+          Chapter {num}
+        </div>
+      </div>
+      <h2 className="chapter-title">{title}</h2>
+    </div>
+  )
+}
+
+// ─── Section Banner (h1 ─ book-level title) ─────────────────────────────────
+function SectionBanner({ text }) {
+  return (
+    <div className="section-banner">
+      <div className="banner-pill">☕ Java Programming</div>
       <h1 className="banner-title">{text.replace(/^[#\s]+/, '').replace(/[🐍☕]\s*/, '')}</h1>
     </div>
   )
 }
 
-// ─── Chapter Heading ────────────────────────────────────────────────────────────────────
-function ChapterHeading({ text, theme, id }) {
-  // Do not break before the very first chapter 
-  const isFirst = text.includes('Chapter 1:');
-
+// ─── Exercise Heading ───────────────────────────────────────────────────────
+function ExerciseHeading() {
   return (
-    <div
-      id={id}
-      className={`chapter-heading theme-${theme} ${isFirst ? '' : 'pagedjs-page-break'}`}
-    >
-      <div className="chapter-badge">Chapter</div>
-      <h2 className="chapter-title">{text.replace(/^📖\s*/, '')}</h2>
-    </div>
-  )
-}
-
-// ─── Exercise Heading ─────────────────────────────────────────────────────────
-function ExerciseHeading({ theme }) {
-  return (
-    <div className={`exercise-heading theme-${theme}`}>
+    <div className="exercise-heading">
       <span className="exercise-heading-icon">🧠</span>
       <span>Exercises</span>
     </div>
   )
 }
 
-function extractText(node) {
-  if (typeof node === 'string') return node
-  if (Array.isArray(node)) return node.map(extractText).join('')
-  if (node?.props?.children) return extractText(node.props.children)
-  return String(node || '')
-}
-
-// ─── App ─────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+//  App
+// ══════════════════════════════════════════════════════════════════════════════
 export default function App() {
   const [chapters, setChapters] = useState([])
   const [activeChapter, setActiveChapter] = useState(null)
-  const [currentTheme, setCurrentTheme] = useState('python')
 
   const sourceRef = useRef(null)
   const pagedRef = useRef(null)
   const [isPagedRendered, setIsPagedRendered] = useState(false)
+  const isPreviewing = useRef(false)
 
-  // Shared mutable context — mutated synchronously during each render pass
+  // Shared mutable render context (mutated synchronously during markdown render)
   const ctx = useRef({
-    theme: 'python',
     nextIsRealLife: false,
-    nextIsSoftware: false,
     nextIsDYK: false,
     nextIsError: false,
     nextIsRecap: false,
@@ -146,6 +148,7 @@ export default function App() {
     nextIsExercise: false,
   }).current
 
+  // ── Parse chapters from markdown ─────────────────────────────────────────
   useEffect(() => {
     const lines = textbookContent.replace(/\r\n/g, '\n').split('\n')
     setChapters(
@@ -153,28 +156,18 @@ export default function App() {
     )
   }, [])
 
-  const isPreviewing = useRef(false)
-
-  // Run Paged.js
+  // ── Run Paged.js ─────────────────────────────────────────────────────────
   useEffect(() => {
     if (sourceRef.current && pagedRef.current && !isPagedRendered && !isPreviewing.current) {
       isPreviewing.current = true
       pagedRef.current.innerHTML = ''
-
-      // ── Ensure style block for other Paged.js elements isn't interfering with chapters
-      let pagedStyle = document.getElementById('paged-break-style')
-      if (!pagedStyle) {
-        pagedStyle = document.createElement('style')
-        pagedStyle.id = 'paged-break-style'
-        document.head.appendChild(pagedStyle)
-      }
 
       const paged = new Previewer()
       paged.preview(sourceRef.current.innerHTML, [], pagedRef.current).then(() => {
         const container = pagedRef.current
         if (!container) return
 
-        // ── 1. Shrink margin boxes ─────────────────────────────────────────────
+        // Shrink margin boxes
         container.querySelectorAll(
           '.pagedjs_margin-top, .pagedjs_margin-top-left-corner-holder, .pagedjs_margin-top-right-corner-holder'
         ).forEach(el => el.style.setProperty('height', '6px', 'important'))
@@ -199,7 +192,7 @@ export default function App() {
           el.style.setProperty('bottom', '28px', 'important')
         })
 
-        // ── 2. Inject page numbers at bottom of every page ─────────────────────
+        // Inject page numbers
         container.querySelectorAll('.pagedjs_page').forEach((page, index) => {
           page.querySelectorAll('.manual-page-num').forEach(n => n.remove())
           const num = document.createElement('div')
@@ -212,9 +205,9 @@ export default function App() {
             'right:0',
             'text-align:center',
             'font-family:Inter,system-ui,sans-serif',
-            'font-size:11px',
+            'font-size:10px',
             'font-weight:500',
-            'color:#7a7570',
+            'color:#9ca3af',
             'letter-spacing:0.06em',
             'pointer-events:none',
             'z-index:100',
@@ -227,39 +220,44 @@ export default function App() {
     }
   }, [isPagedRendered])
 
-
+  // ── Scroll-to-chapter ────────────────────────────────────────────────────
   const scrollToChapter = (chapterName) => {
     setActiveChapter(chapterName)
-    const id = "chapter-" + chapterName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()
+    const id = 'chapter-' + chapterName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()
     if (pagedRef.current) {
       const target = pagedRef.current.querySelector('#' + id)
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
+  // ── Get chapter number from title ────────────────────────────────────────
+  const getChapterNum = (chap) => {
+    const m = chap.match(/Chapter\s+(\d+)/i)
+    return m ? m[1] : '?'
+  }
 
+  // ── Progress calculation ─────────────────────────────────────────────────
+  const activeIndex = chapters.indexOf(activeChapter)
+  const progress = chapters.length > 0
+    ? Math.max(4, ((activeIndex + 1) / chapters.length) * 100)
+    : 4
 
-  // ── Markdown component overrides ────────────────────────────────────────────
+  // ── Markdown component overrides ─────────────────────────────────────────
   const components = {
     h1({ children }) {
       const text = extractText(children)
-      const theme = text.toLowerCase().includes('java') ? 'java' : 'python'
-      ctx.theme = theme
-      ctx.nextIsRealLife = ctx.nextIsDYK =
-        ctx.nextIsError = ctx.nextIsRecap = ctx.nextIsLab =
-        ctx.nextIsExercise = false
-      return <SectionBanner text={text} theme={theme} />
+      ctx.nextIsRealLife = ctx.nextIsDYK = ctx.nextIsError =
+        ctx.nextIsRecap = ctx.nextIsLab = ctx.nextIsExercise = false
+      return <SectionBanner text={text} />
     },
 
     h2({ children }) {
       const text = extractText(children)
       const id = 'chapter-' + text.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()
       if (text.includes('Chapter')) {
-        return <ChapterHeading id={id} text={text} theme={ctx.theme} />
+        return <ChapterHeading id={id} text={text} />
       }
-      return <h2 id={id} className={`section-h2 theme-${ctx.theme}`}>{children}</h2>
+      return <h2 id={id} className="section-h2">{children}</h2>
     },
 
     h3({ children }) {
@@ -269,8 +267,9 @@ export default function App() {
       if (text.includes('Common Error') || text.includes('⚠️')) { ctx.nextIsError = true; return null }
       if (text.includes('Quick Recap') || text.includes('📝')) { ctx.nextIsRecap = true; return null }
       if (text.includes('Lab Activity') || text.includes('🧪') || text.includes('✏️')) { ctx.nextIsLab = true; return null }
-      if (text.includes('Exercises') || text.includes('🧠')) { ctx.nextIsExercise = true; return <ExerciseHeading theme={ctx.theme} /> }
-      return <h3 className={`content-h3 theme-${ctx.theme}`}>{children}</h3>
+      if (text.includes('Exercises') || text.includes('🧠')) { ctx.nextIsExercise = true; return <ExerciseHeading /> }
+      if (text.includes('Software') || text.includes('🔧')) { return null }
+      return <h3 className="content-h3">{children}</h3>
     },
 
     p({ children }) {
@@ -286,13 +285,13 @@ export default function App() {
     },
 
     ol({ children }) {
-      if (ctx.nextIsLab) { ctx.nextIsLab = false; return <LabCard theme={ctx.theme}><ol className="lab-steps">{children}</ol></LabCard> }
+      if (ctx.nextIsLab) { ctx.nextIsLab = false; return <LabCard><ol className="lab-steps">{children}</ol></LabCard> }
       return <ol className="book-list book-ol">{children}</ol>
     },
 
     blockquote({ children }) {
       return (
-        <div className="software-steps setup-box-small">
+        <div className="software-steps">
           <div className="software-header"><span>🔧</span> Setup Instructions</div>
           <div className="software-body">{children}</div>
         </div>
@@ -313,7 +312,7 @@ export default function App() {
     table({ children }) {
       return (
         <div className="table-wrapper">
-          <table className={`custom-table table-${ctx.theme}`}>{children}</table>
+          <table className="custom-table">{children}</table>
         </div>
       )
     },
@@ -323,14 +322,12 @@ export default function App() {
     th({ children }) { return <th>{children}</th> },
     td({ children }) { return <td>{children}</td> },
 
-    // ── code: pass language blocks through; style inline code ──────────────────
     code({ className, children, ...props }) {
       if (className?.startsWith('language-'))
         return <code className={className}>{children}</code>
       return <code className="inline-code" {...props}>{children}</code>
     },
 
-    // ── pre: wraps ALL fenced code blocks ──────────────────────────────────────
     pre({ children }) {
       const codeEl = Array.isArray(children) ? children[0] : children
       const cls = codeEl?.props?.className || ''
@@ -340,12 +337,11 @@ export default function App() {
         const themeClass = lang === 'java' ? 'code-java' : lang === 'python' ? 'code-python' : ''
         return (
           <div className={`code-block ${themeClass}`}>
-            {lang && <div className="code-lang-badge">{lang.toUpperCase()}</div>}
+            {lang && <div className="code-lang-badge">⬡ {lang.toUpperCase()}</div>}
             <pre><code>{codeEl?.props?.children}</code></pre>
           </div>
         )
       }
-      // No language → output block
       return (
         <div className="code-output">
           <pre><code>{codeEl?.props?.children}</code></pre>
@@ -354,7 +350,7 @@ export default function App() {
     },
 
     hr() {
-      return <div className="page-divider"><span>✦ ✦ ✦</span></div>
+      return <div className="page-divider"><span>✦</span></div>
     },
 
     strong({ children }) {
@@ -362,72 +358,74 @@ export default function App() {
     },
   }
 
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className={`layout theme-root-${currentTheme}`}>
+    <div className="layout">
 
-      {/* ── Sidebar ── */}
+      {/* ── Sidebar ───────────────────────────────────────────── */}
       <nav className="sidebar">
         <div className="logo-area">
-          <div className="logo-icon">📘</div>
-          <h1>CS Textbook</h1>
-          <p>Grade 9 Edition</p>
+          <div className="logo-tagline">
+            <div className="logo-badge">☕ Java</div>
+          </div>
+          <div className="logo-title">CS Textbook</div>
+          <div className="logo-subtitle">Grade 9 Edition · Chapters 7 – 9</div>
+          <div className="logo-divider" />
         </div>
 
-        <div className="section-label">Python 🐍</div>
-        <ul className="nav-list">
-          {chapters.filter(c => !c.toLowerCase().includes('java')).map((chap, i) => (
-            <li key={i}
-              className={`nav-item python-item ${activeChapter === chap ? 'active' : ''}`}
-              onClick={() => scrollToChapter(chap)}>
-              <span className="nav-num">{i + 1}</span>
-              <span className="nav-text">{chap.replace(/^📖\s*/, '')}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="section-label java-label">Java ☕</div>
-        <ul className="nav-list">
-          {chapters
-            .filter(c => c.toLowerCase().includes('java') ||
-              c.toLowerCase().includes('control') ||
-              c.toLowerCase().includes('basic java'))
-            .map((chap, i) => (
-              <li key={i}
-                className={`nav-item java-item ${activeChapter === chap ? 'active' : ''}`}
-                onClick={() => scrollToChapter(chap)}>
-                <span className="nav-num">{i + 4}</span>
-                <span className="nav-text">{chap.replace(/^📖\s*/, '')}</span>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '0 1rem' }}>
+          <div className="nav-section-label">Chapters</div>
+          <ul className="nav-list">
+            {chapters.map((chap, i) => (
+              <li
+                key={i}
+                className={`nav-item ${activeChapter === chap ? 'active' : ''}`}
+                onClick={() => scrollToChapter(chap)}
+              >
+                <span className="nav-num">{getChapterNum(chap)}</span>
+                <span className="nav-text">
+                  {chap.replace(/^📖\s*/, '').replace(/Chapter\s+\d+:\s*/i, '')}
+                </span>
               </li>
             ))}
-        </ul>
+          </ul>
+        </div>
 
         <div className="sidebar-footer">
           <button className="export-btn" onClick={() => window.print()}>
-            🖨️ Export PDF
+            🖨️ Export as PDF
           </button>
-          <div className="progress-label">Progress</div>
-          <div className="progress-bar">
-            <div className="progress-fill"
-              style={{ width: `${(chapters.indexOf(activeChapter) + 1) / Math.max(chapters.length, 1) * 100}%` }} />
+          <div className="progress-label">
+            <span>Reading Progress</span>
+            <span style={{ color: 'rgba(251,191,36,0.7)' }}>
+              {activeIndex >= 0 ? `${activeIndex + 1}/${chapters.length}` : `0/${chapters.length}`}
+            </span>
+          </div>
+          <div className="progress-track">
+            <div className="progress-fill" style={{ width: `${progress}%` }} />
           </div>
         </div>
       </nav>
 
-      {/* ── Main content wrapper ── */}
-      <main className="content" style={{ overflow: 'auto', background: '#e0e0e0', padding: 0 }}>
-
-        {/* Hidden Source Content for Paged.js to read from */}
+      {/* ── Main Content ─────────────────────────────────────── */}
+      <main className="content">
+        {/* Hidden source for Paged.js */}
         <div ref={sourceRef} style={{ display: 'none' }}>
           <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
             {textbookContent}
           </ReactMarkdown>
         </div>
 
-        {/* Paged.js Render Target */}
-        <div className="paged-viewer-container" ref={pagedRef}>
-          {/* Paged.js injects pages here */}
-        </div>
+        {/* Loading indicator */}
+        {!isPagedRendered && (
+          <div className="loading-screen">
+            <div className="loading-spinner" />
+            <div className="loading-text">Rendering textbook pages…</div>
+          </div>
+        )}
 
+        {/* Paged.js render target */}
+        <div className="paged-viewer-container" ref={pagedRef} />
       </main>
     </div>
   )
